@@ -1,0 +1,19 @@
+#odoo
+.cursor
+.idea
+.vscode
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+
+# Odoo
+odoo-19.0
+filestore/
+sessions/
+*.log
+
+# System
+.DS_Store
