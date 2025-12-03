@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 繼承銷售訂單表單視圖 -->
+    <record id="view_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.custom</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            
+            <!-- 在付款條件之後新增運送備註欄位 -->
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="shipping_note" placeholder="請輸入運送相關的特殊說明或注意事項..."/>
+            </xpath>
+            
+            <!-- 在稅金總計區域新增應收帳款總金額 -->
+            <xpath expr="//field[@name='tax_totals']" position="after">
+                <group class="oe_subtotal_footer_separator">
+                    <field name="total_invoice_amount" widget="monetary"/>
+                </group>
+            </xpath>
+            
+        </field>
+    </record>
+
+    <!-- 繼承銷售訂單列表視圖 -->
+    <record id="view_order_tree_inherit" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit.custom</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            
+            <!-- 在列表視圖中新增應收帳款總金額欄位 -->
+            <xpath expr="//field[@name='amount_total']" position="after">
+                <field name="total_invoice_amount" optional="hide" sum="Total"/>
+            </xpath>
+            
+        </field>
+    </record>
+
+</odoo>
+
