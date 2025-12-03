@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- 預設圖書分類 -->
+        
+        <record id="category_literature" model="library.book.category">
+            <field name="name">Literature</field>
+            <field name="code">LIT</field>
+            <field name="description">Literary works including novels, poetry, drama, and short stories</field>
+        </record>
+        
+        <record id="category_science" model="library.book.category">
+            <field name="name">Science</field>
+            <field name="code">SCI</field>
+            <field name="description">Scientific books covering physics, chemistry, biology, and general science</field>
+        </record>
+        
+        <record id="category_history" model="library.book.category">
+            <field name="name">History</field>
+            <field name="code">HIS</field>
+            <field name="description">Historical books and biographies</field>
+        </record>
+        
+        <record id="category_arts" model="library.book.category">
+            <field name="name">Arts</field>
+            <field name="code">ART</field>
+            <field name="description">Books about art, music, painting, sculpture, and other creative arts</field>
+        </record>
+        
+        <record id="category_language" model="library.book.category">
+            <field name="name">Language</field>
+            <field name="code">LANG</field>
+            <field name="description">Language learning, linguistics, and dictionaries</field>
+        </record>
+        
+        <record id="category_mathematics" model="library.book.category">
+            <field name="name">Mathematics</field>
+            <field name="code">MATH</field>
+            <field name="description">Mathematics books including algebra, geometry, calculus, and statistics</field>
+        </record>
+        
+        <record id="category_social_science" model="library.book.category">
+            <field name="name">Social Science</field>
+            <field name="code">SOC</field>
+            <field name="description">Books about sociology, psychology, economics, and political science</field>
+        </record>
+        
+        <record id="category_technology" model="library.book.category">
+            <field name="name">Technology</field>
+            <field name="code">TECH</field>
+            <field name="description">Technology, computer science, and engineering books</field>
+        </record>
+        
+        <record id="category_philosophy" model="library.book.category">
+            <field name="name">Philosophy</field>
+            <field name="code">PHIL</field>
+            <field name="description">Philosophy, ethics, and logic</field>
+        </record>
+        
+        <record id="category_reference" model="library.book.category">
+            <field name="name">Reference</field>
+            <field name="code">REF</field>
+            <field name="description">Reference books, encyclopedias, and handbooks</field>
+        </record>
+        
+    </data>
+</odoo>
+

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- 圖書動作 -->
+        <record id="action_library_book" model="ir.actions.act_window">
+            <field name="name">Books</field>
+            <field name="res_model">library.book</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="context">{
+                'search_default_available': 1,
+            }</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first book!
+                </p>
+                <p>
+                    Add books to your library to start managing your collection.
+                    You can track inventory, categorize books, and more.
+                </p>
+            </field>
+        </record>
+        
+        <!-- 圖書分類動作 -->
+        <record id="action_library_book_category" model="ir.actions.act_window">
+            <field name="name">Book Categories</field>
+            <field name="res_model">library.book.category</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{
+                'search_default_active': 1,
+            }</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first book category!
+                </p>
+                <p>
+                    Categories help you organize your library collection.
+                    Create categories like Literature, Science, History, etc.
+                </p>
+            </field>
+        </record>
+        
+        <!-- 根選單 -->
+        <menuitem id="menu_library_root"
+                  name="Library"
+                  sequence="10"
+                  web_icon="library_management,static/description/icon.png"/>
+        
+        <!-- 圖書選單 -->
+        <menuitem id="menu_library_book"
+                  name="Books"
+                  parent="menu_library_root"
+                  action="action_library_book"
+                  sequence="10"/>
+        
+        <!-- 設定選單 -->
+        <menuitem id="menu_library_configuration"
+                  name="Configuration"
+                  parent="menu_library_root"
+                  sequence="100"
+                  groups="library_management.group_library_manager"/>
+        
+        <!-- 分類設定選單 -->
+        <menuitem id="menu_library_book_category"
+                  name="Book Categories"
+                  parent="menu_library_configuration"
+                  action="action_library_book_category"
+                  sequence="10"/>
+        
+        <!-- 借閱管理動作 -->
+        <record id="action_library_borrowing" model="ir.actions.act_window">
+            <field name="name">Borrowings</field>
+            <field name="res_model">library.borrowing</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="context">{
+                'search_default_borrowed': 1,
+            }</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first borrowing record!
+                </p>
+                <p>
+                    Manage book borrowings, returns, and renewals.
+                </p>
+            </field>
+        </record>
+        
+        <!-- 逾期借閱動作 -->
+        <record id="action_library_borrowing_overdue" model="ir.actions.act_window">
+            <field name="name">Overdue Borrowings</field>
+            <field name="res_model">library.borrowing</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('is_overdue', '=', True), ('state', '=', 'borrowed')]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No overdue borrowings!
+                </p>
+                <p>
+                    All books have been returned on time.
+                </p>
+            </field>
+        </record>
+        
+        <!-- 借閱選單 -->
+        <menuitem id="menu_library_borrowing"
+                  name="Borrowings"
+                  parent="menu_library_root"
+                  action="action_library_borrowing"
+                  sequence="20"/>
+        
+        <!-- 逾期借閱選單 -->
+        <menuitem id="menu_library_borrowing_overdue"
+                  name="Overdue Borrowings"
+                  parent="menu_library_root"
+                  action="action_library_borrowing_overdue"
+                  sequence="30"/>
+        
+    </data>
+</odoo>
+
