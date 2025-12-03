@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- 
+            Estate 模組分類
+            用於在使用者設定中顯示 Real Estate 應用程式群組
+        -->
+        <record model="ir.module.category" id="module_category_real_estate">
+            <field name="name">Real Estate</field>
+            <field name="description">Manage real estate properties, offers, and sales</field>
+            <field name="sequence">35</field>
+        </record>
+
+        <!-- 
+            Estate 權限等級 (Privilege)
+            Odoo 19 使用 res.groups.privilege 來組織同一應用程式下的不同權限等級
+        -->
+        <record model="res.groups.privilege" id="res_groups_privilege_estate">
+            <field name="name">Real Estate</field>
+            <field name="sequence">10</field>
+            <field name="category_id" ref="module_category_real_estate"/>
+        </record>
+
+        <!-- 
+            Estate User 群組
+            一般使用者：可以查看、建立、編輯自己的房產資料
+        -->
+        <record id="group_estate_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="sequence">10</field>
+            <field name="privilege_id" ref="res_groups_privilege_estate"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">The user will have access to real estate properties and can manage their own listings.</field>
+        </record>
+
+        <!-- 
+            Estate Manager 群組
+            管理者：可以管理所有房產資料，包含設定和進階功能
+        -->
+        <record id="group_estate_manager" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="sequence">20</field>
+            <field name="privilege_id" ref="res_groups_privilege_estate"/>
+            <field name="implied_ids" eval="[(4, ref('group_estate_user'))]"/>
+            <field name="comment">The user will have full access to all real estate features including configuration and all properties.</field>
+            <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+    </data>
+
+    <!-- 
+        記錄規則 (Record Rules)
+        noupdate="1" 表示更新模組時不會覆蓋這些規則
+    -->
+    <data noupdate="1">
+        <!-- 
+            Estate User 只能看到自己負責的房產
+        -->
+        <record id="estate_property_rule_user" model="ir.rule">
+            <field name="name">Estate Property: User - Own Properties</field>
+            <field name="model_id" ref="model_estate_property"/>
+            <field name="domain_force">[('seller_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_estate_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- 
+            Estate Manager 可以看到所有房產
+        -->
+        <record id="estate_property_rule_manager" model="ir.rule">
+            <field name="name">Estate Property: Manager - All Properties</field>
+            <field name="model_id" ref="model_estate_property"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_estate_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- 
+            Estate User 只能看到自己房產的報價
+        -->
+        <record id="estate_property_offer_rule_user" model="ir.rule">
+            <field name="name">Estate Property Offer: User - Own Property Offers</field>
+            <field name="model_id" ref="model_estate_property_offer"/>
+            <field name="domain_force">[('property_id.seller_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_estate_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- 
+            Estate Manager 可以看到所有報價
+        -->
+        <record id="estate_property_offer_rule_manager" model="ir.rule">
+            <field name="name">Estate Property Offer: Manager - All Offers</field>
+            <field name="model_id" ref="model_estate_property_offer"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_estate_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+    </data>
+</odoo>
+
