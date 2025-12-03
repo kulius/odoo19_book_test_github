@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- 借閱記錄列表視圖 -->
+        <record id="library_borrowing_view_tree" model="ir.ui.view">
+            <field name="name">library.borrowing.tree</field>
+            <field name="model">library.borrowing</field>
+            <field name="arch" type="xml">
+                <list string="Borrowing Records" sample="1"
+                      decoration-danger="is_overdue and state == 'borrowed'"
+                      decoration-success="state == 'returned'"
+                      decoration-muted="state == 'cancelled'">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="book_id"/>
+                    <field name="borrow_date"/>
+                    <field name="due_date"/>
+                    <field name="return_date" optional="hide"/>
+                    <field name="overdue_days" optional="show"/>
+                    <field name="state" widget="badge" 
+                           decoration-success="state == 'returned'"
+                           decoration-info="state == 'borrowed'"
+                           decoration-warning="state == 'draft'"/>
+                    <field name="is_overdue" column_invisible="True"/>
+                </list>
+            </field>
+        </record>
+        
+        <!-- 借閱記錄表單視圖 -->
+        <record id="library_borrowing_view_form" model="ir.ui.view">
+            <field name="name">library.borrowing.form</field>
+            <field name="model">library.borrowing</field>
+            <field name="arch" type="xml">
+                <form string="Borrowing Record">
+                    <header>
+                        <button name="action_borrow" string="借閱" type="object" 
+                                invisible="state != 'draft'" class="oe_highlight"/>
+                        <button name="action_return" string="歸還" type="object" 
+                                invisible="state != 'borrowed'" class="oe_highlight"/>
+                        <button name="action_renew" string="續借" type="object" 
+                                invisible="state != 'borrowed' or not can_renew"/>
+                        <button name="action_cancel" string="取消" type="object" 
+                                invisible="state in ['returned', 'cancelled']"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,borrowed,returned"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="partner_id" readonly="state != 'draft'"/>
+                                <field name="book_id" readonly="state != 'draft'"/>
+                            </group>
+                            <group>
+                                <field name="borrow_date" readonly="state != 'draft'"/>
+                                <field name="due_date" readonly="state != 'draft'"/>
+                                <field name="return_date" readonly="1" invisible="state != 'returned'"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="renew_count" readonly="1"/>
+                                <field name="max_renew_count" invisible="1"/>
+                                <field name="can_renew" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="overdue_days" readonly="1" invisible="overdue_days == 0"/>
+                                <field name="is_overdue" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+        
+        <!-- 借閱記錄搜尋視圖 -->
+        <record id="library_borrowing_view_search" model="ir.ui.view">
+            <field name="name">library.borrowing.search</field>
+            <field name="model">library.borrowing</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="book_id"/>
+                    <field name="state"/>
+                </search>
+            </field>
+        </record>
+        
+        <!-- 借閱記錄看板視圖 -->
+        <record id="library_borrowing_view_kanban" model="ir.ui.view">
+            <field name="name">library.borrowing.kanban</field>
+            <field name="model">library.borrowing</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state" sample="1">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="book_id"/>
+                    <field name="due_date"/>
+                    <field name="state"/>
+                    <field name="is_overdue"/>
+                    <field name="overdue_days"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_card">
+                                <div class="oe_kanban_content">
+                                    <div class="oe_kanban_details">
+                                        <strong><field name="name"/></strong>
+                                        <div>
+                                            <i class="fa fa-user"/> <field name="partner_id"/>
+                                        </div>
+                                        <div>
+                                            <i class="fa fa-book"/> <field name="book_id"/>
+                                        </div>
+                                        <div>
+                                            <i class="fa fa-calendar"/> 到期：<field name="due_date"/>
+                                        </div>
+                                        <div t-if="record.is_overdue.raw_value and record.state.raw_value == 'borrowed'" class="text-danger">
+                                            <i class="fa fa-exclamation-triangle"/> 逾期 <field name="overdue_days"/> 天
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+    </data>
+</odoo>
+
