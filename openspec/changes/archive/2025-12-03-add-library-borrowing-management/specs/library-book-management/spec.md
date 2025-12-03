@@ -63,7 +63,9 @@
 - **THEN** 該書籍的可借閱數量自動加 1，變為 4
 - **AND** 總數量保持不變
 
-### Requirement: 刪除書籍
+## ADDED Requirements
+
+### Requirement: 刪除書籍檢查
 系統 SHALL 在刪除書籍前檢查是否有未歸還的借閱記錄。
 
 #### Scenario: 刪除無借閱記錄的書籍
@@ -90,8 +92,6 @@
 - **THEN** 系統拒絕刪除操作
 - **AND** 顯示錯誤訊息「無法刪除有未歸還借閱的書籍」
 - **AND** 提示使用者先處理未歸還的借閱記錄
-
-## ADDED Requirements
 
 ### Requirement: 借閱統計資訊
 系統 SHALL 在書籍資訊中顯示借閱統計資訊，包括總借閱次數和當前借閱狀態。
